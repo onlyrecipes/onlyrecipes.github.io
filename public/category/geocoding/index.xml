@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>geocoding | Steven DiFalco</title>
+    <link>/category/geocoding/</link>
+      <atom:link href="/category/geocoding/index.xml" rel="self" type="application/rss+xml" />
+    <description>geocoding</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2020 Steven DiFalco</copyright><lastBuildDate>Thu, 11 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/images/icon_hub4e451f8373da2880beada631b18c0fe_51688_512x512_fill_lanczos_center_2.png</url>
+      <title>geocoding</title>
+      <link>/category/geocoding/</link>
+    </image>
+    
+    <item>
+      <title>Geocoding Points by Place Name using ArcGIS Online </title>
+      <link>/post/geocoding-points-by-place-name-using-arcgis-online/</link>
+      <pubDate>Thu, 11 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>/post/geocoding-points-by-place-name-using-arcgis-online/</guid>
+      <description>
+
+
+&lt;div id=&#34;this-is-the-second-post-to-using-the-urban-ranger-response-call-from-nyc-open-data-first-posthttpswww.stevendifalco.compostnyc-urban-ranger-animal-response.-the-data-did-not-have-specific-location-information-such-as-xy-coordinates-but-there-was-a-field-property-in-the-database.-using-this-field-i-decided-to-try-out-geocoding-the-information-in-arcgis-online.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;This is the second post to using the Urban Ranger Response Call from NYC Open Data (first post)[&lt;a href=&#34;https://www.stevendifalco.com/post/nyc-urban-ranger-animal-response/&#34; class=&#34;uri&#34;&gt;https://www.stevendifalco.com/post/nyc-urban-ranger-animal-response/&lt;/a&gt;]. The data did not have specific location information, such as XY coordinates, but there was a field &lt;code&gt;Property&lt;/code&gt; in the database. Using this field, I decided to try out geocoding the information in ArcGIS Online.&lt;/h5&gt;
+&lt;/div&gt;
+&lt;div id=&#34;to-start-lets-read-in-the-data.-in-viewing-the-first-10-rows-i-already-see-we-might-have-some-cleaning-needed-for-this-column-also.-washingtom-vs-washington-square-park.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;To start, let’s read in the data. In viewing the first 10 rows, I already see we might have some cleaning needed for this column also. “WashingtoM” vs “WashingtoN” Square Park.&lt;/h5&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Note, this first csv has been cleaned as part of the first post, so see that part to check what has been changed already from the original dataset. 
+
+data_raw &amp;lt;- read.csv(&amp;quot;UrbanRangerDataClean.csv&amp;quot;)
+
+#Calls by property
+head(data_raw$Property, n=10)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] Washingtom Square Park       Van Cortlandt Park          
+##  [3] Irving Square Park           Parade Ground               
+##  [5] Silver Lake Park             Washington Square Park      
+##  [7] Tompkins Square Park         Tompkins Square Park        
+##  [9] Flushing Meadows Corona Park Flushing Meadows Corona Park
+## 194 Levels: 5 East 102nd St 851 Fairmont Pl Abingdon Square ... Wolfe&amp;#39;s Pond Park&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;i-decided-to-try-out-using-open-refinehttpsopenrefine.org-to-clean-up-the-data-instead-of-trying-to-use-r.-open-refine-simplifies-the-process-of-finding-text-that-are-close-to-one-another-and-allows-for-easy-cleaning.-follow-videos-on-their-webpage-to-get-the-data_raw.csv-file-uploaded-if-you-want-to-follow-along.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;I decided to try out using (Open Refine)[&lt;a href=&#34;https://openrefine.org/&#34; class=&#34;uri&#34;&gt;https://openrefine.org/&lt;/a&gt;] to clean up the data instead of trying to use R. Open Refine simplifies the process of finding text that are close to one another and allows for easy cleaning. Follow videos on their webpage to get the &lt;code&gt;data_raw.csv&lt;/code&gt; file uploaded if you want to follow along.&lt;/h5&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-the-facet-feature-on-the-property-column-we-can-group-together-like-text.-using-cluster-and-nearest-neighbor-function-we-get-the-pop-up-below.-i-went-through-different-types-of-clustering-to-merge-similar-properties-names-together.-i-also-did-the-step-above-for-species.description-and-animal.class-to-refine-these-columns.-last-step-add-a-column-for-state-and-put-new-york-for-all-entries--reason-will-be-clear-below.-export-this-csv-file.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;Using the Facet feature on the Property Column, we can group together like text. Using Cluster and Nearest Neighbor function, we get the pop-up below. I went through different types of clustering to merge similar properties names together. I also did the step above for &lt;code&gt;species.description&lt;/code&gt; and &lt;code&gt;animal.class&lt;/code&gt; to refine these columns. &lt;em&gt;Last&lt;/em&gt; step, add a column for &lt;code&gt;State&lt;/code&gt; and put New York for all entries- reason will be clear below. Export this csv file.&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&#34;OpenRefine.png&#34; title=&#34;photo&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;now-to-bring-this-over-to-arconline-to-geocode-but-one-final-step-is-needed-first-creating-a-layer-which-allows-arconline-to-query-location-names-for-geocoding.-i-followed-thishttpsdoc.arcgis.comenarcgis-onlinereferencegeocode.htm-tutorial-to-make-one-for-the-united-states.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;Now to bring this over to ArcOnline to geocode! But one final step is needed first; creating a layer which allows ArcOnline to query location names for geocoding. I followed (this)[&lt;a href=&#34;https://doc.arcgis.com/en/arcgis-online/reference/geocode.htm&#34; class=&#34;uri&#34;&gt;https://doc.arcgis.com/en/arcgis-online/reference/geocode.htm&lt;/a&gt;] tutorial to make one for the United States.&lt;/h5&gt;
+&lt;/div&gt;
+&lt;div id=&#34;to-a-new-map-in-arcgis-online-add-the-cleaned-data-and-you-will-get-a-popup-that-looks-like-this&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;To a new map in ArcGIS Online, add the cleaned data and you will get a popup that looks like this:&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&#34;CSV.png&#34; title=&#34;photo&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;change-location-field-to-state-state-and-property-location-or-place.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;Change “Location Field” to State= State and Property = Location or Place.&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&#34;csv2.png&#34; title=&#34;photo&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;without-adding-the-state-column-originally-the-dataset-put-points-across-the-us-such-as-this-group-in-manhattan-kansas.-just-adding-the-additional-information-focused-the-points-to-be-mapped-at-least-in-ny-state-with-the-majority-in-the-correct-nyc-area.&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;Without adding the state column, originally the dataset put points across the US, such as this &lt;em&gt;group&lt;/em&gt; in Manhattan, Kansas. Just adding the additional information focused the points to be mapped at least in NY state, with the majority in the correct NYC area.&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&#34;ManhattanKansas.png&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;here-is-the-current-online-map-to-explore.-orange-in-this-map-indicate-points-with-the-state-field-vs-those-without-state-field.&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;Here is the current online map to explore. Orange in this map indicate points with the state field, vs those without state field.&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;NYC_Calls.png&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

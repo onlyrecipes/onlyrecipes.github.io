@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Connecticut | Steven DiFalco</title>
+    <link>/tag/connecticut/</link>
+      <atom:link href="/tag/connecticut/index.xml" rel="self" type="application/rss+xml" />
+    <description>Connecticut</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2020 Steven DiFalco</copyright><lastBuildDate>Thu, 28 May 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/images/icon_hub4e451f8373da2880beada631b18c0fe_51688_512x512_fill_lanczos_center_2.png</url>
+      <title>Connecticut</title>
+      <link>/tag/connecticut/</link>
+    </image>
+    
+    <item>
+      <title>Mansfield Trail Mapper</title>
+      <link>/projects/mansfieldmapper/</link>
+      <pubDate>Thu, 28 May 2020 00:00:00 +0000</pubDate>
+      <guid>/projects/mansfieldmapper/</guid>
+      <description>&lt;h3 id=&#34;this-interactive-map-application-allows-the-user-to-select-different-attributes-such-as-trails-to-find-out-more-information-and-directions-to-the-location-this-project-was-done-in-collaboration-with-joshuas-trust-and-the-town-of-mansfield-ct-pulling-together-town-state-and-land-trust-trails-to-one-place-and-provide-useful-information-for-those-who-would-like-to-recreate-in-the-mansfield-ct-created-using-arcgis-online&#34;&gt;This interactive map application allows the user to select different attributes (such as trails) to find out more information and directions to the location. This project was done in collaboration with Joshua&amp;rsquo;s Trust and the town of Mansfield, CT. Pulling together town, state, and land trust trails to one place and provide useful information for those who would like to recreate in the Mansfield, CT. Created using ArcGIS Online.&lt;/h3&gt;
+&lt;h3 id=&#34;currently-the-map-is-not-live-to-the-public-the-screen-capture-below-shows-how-a-user-can-find-out-information-by-clicking-on-a-trail-and-further-understand-where-preserves-are-located-in-the-town&#34;&gt;Currently, the map is not live to the public. The screen capture below shows how a user can find out information by clicking on a trail, and further understand where preserves are located in the town.&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;ScreenShot.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

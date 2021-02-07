@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Only Recipes</title>
+    <link>/author/only-recipes/</link>
+      <atom:link href="/author/only-recipes/index.xml" rel="self" type="application/rss+xml" />
+    <description>Only Recipes</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2020 Steven DiFalco</copyright>
+    <image>
+      <url>/images/icon_hub4e451f8373da2880beada631b18c0fe_51688_512x512_fill_lanczos_center_2.png</url>
+      <title>Only Recipes</title>
+      <link>/author/only-recipes/</link>
+    </image>
+    
+  </channel>
+</rss>

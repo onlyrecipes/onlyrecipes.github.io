@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>data visualization | Steven DiFalco</title>
+    <link>/category/data-visualization/</link>
+      <atom:link href="/category/data-visualization/index.xml" rel="self" type="application/rss+xml" />
+    <description>data visualization</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2020 Steven DiFalco</copyright><lastBuildDate>Tue, 30 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/images/icon_hub4e451f8373da2880beada631b18c0fe_51688_512x512_fill_lanczos_center_2.png</url>
+      <title>data visualization</title>
+      <link>/category/data-visualization/</link>
+    </image>
+    
+    <item>
+      <title>Walkability</title>
+      <link>/post/2020-06-09/</link>
+      <pubDate>Tue, 09 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>/post/2020-06-09/</guid>
+      <description>
+
+
+&lt;div id=&#34;as-part-of-the-tidytuesday-these-figures-display-different-levels-of-bike-and-walk-commutes-based-on-american-community-survey-data.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;As part of the &lt;a href=&#34;https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-11-05&#34;&gt;TidyTuesday&lt;/a&gt;, these figures display different levels of Bike and Walk Commutes based on American Community Survey data.&lt;/h3&gt;
+&lt;/div&gt;
+&lt;div id=&#34;after-some-cleaning-of-the-data-we-can-see-that-in-new-york-and-vermont-a-decent-percentage-of-communters-walk-to-work.-interesting-to-see-that-vermont-commuters-also-bike-to-work-more-frequently.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;After some cleaning of the data, we can see that in New York and Vermont a decent percentage of communters walk to work. Interesting to see that Vermont commuters also bike to work more frequently.&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Modes of travling biking and walking ACS data
+commute_mode &amp;lt;- readr::read_csv(&amp;quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-11-05/commute.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Parsed with column specification:
+## cols(
+##   city = col_character(),
+##   state = col_character(),
+##   city_size = col_character(),
+##   mode = col_character(),
+##   n = col_double(),
+##   percent = col_double(),
+##   moe = col_double(),
+##   state_abb = col_character(),
+##   state_region = col_character()
+## )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;commute_mode$state &amp;lt;- recode(commute_mode$state, 
+                       &amp;quot;Ca&amp;quot;= &amp;quot;California&amp;quot;,
+                       &amp;quot;Massachusett&amp;quot; = &amp;quot;Massachusetts&amp;quot;)
+
+
+#summarise data each state for percent biking and walking
+commute_summary &amp;lt;- commute_mode %&amp;gt;%
+  mutate(state = tolower(state)) %&amp;gt;%
+  group_by(state, mode) %&amp;gt;%
+  summarise(Percent = mean(percent))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## `summarise()` regrouping output by &amp;#39;state&amp;#39; (override with `.groups` argument)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#retrieve state geo data
+states_map &amp;lt;- map_data(&amp;quot;state&amp;quot;)
+
+#filter by Northeastern States
+NE_states &amp;lt;- subset(states_map, region %in% c(&amp;quot;connecticut&amp;quot;, &amp;quot;massachusetts&amp;quot;,&amp;quot;maine&amp;quot;, &amp;quot;new hampshire&amp;quot;, 
+                                          &amp;quot;new york&amp;quot;, &amp;quot;rhode island&amp;quot;, &amp;quot;vermont&amp;quot;))
+#plot by new england states
+commute_summary %&amp;gt;%
+  ggplot(aes(map_id = state)) +
+  geom_map(aes(fill=Percent), map = NE_states)+ #sets up map
+  facet_wrap(vars(mode)) + #displays both bike and walk on same figure
+  expand_limits(x= NE_states$long, y=NE_states$lat)+ #sets limits based on lat/long of states file
+  coord_map(&amp;quot;polyconic&amp;quot;) +
+  scale_fill_viridis(option = &amp;quot;D&amp;quot;) +
+  theme_void()+ #gets rid of xy grid
+  labs(fill = &amp;quot;Percent of commuters&amp;quot;, title= &amp;quot;The Northeast Loves Walking&amp;quot;)+
+  theme(legend.position=&amp;quot;bottom&amp;quot;, plot.title = element_text(hjust =0.5), 
+        strip.text.x = element_text(size = 12))#changes text of mode&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09/index_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;commute_summary&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 102 x 3
+## # Groups:   state [51]
+##    state      mode  Percent
+##    &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;   &amp;lt;dbl&amp;gt;
+##  1 alabama    Bike    0.235
+##  2 alabama    Walk    1.33 
+##  3 alaska     Bike    1.43 
+##  4 alaska     Walk    5.03 
+##  5 arizona    Bike    0.724
+##  6 arizona    Walk    2.10 
+##  7 arkansas   Bike    0.155
+##  8 arkansas   Walk    2.05 
+##  9 california Bike    0.983
+## 10 california Walk    2.36 
+## # … with 92 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;in-contrast-to-northeast-southeast-commuters-do-not-seem-to-prefer-biking-or-walking-to-work.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;In contrast to Northeast, Southeast commuters do not seem to prefer biking or walking to work.&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#filter by southeastern states
+SE_states &amp;lt;- subset(states_map, region %in% c(&amp;quot;alabama&amp;quot;, &amp;quot;florida&amp;quot;, &amp;quot;georgia&amp;quot;, &amp;quot;kentucky&amp;quot;, &amp;quot;mississippi&amp;quot;, 
+                                              &amp;quot;north carolina&amp;quot;, &amp;quot;south carolina&amp;quot;, &amp;quot;tennessee&amp;quot;, &amp;quot;virginia&amp;quot;))
+
+commute_summary %&amp;gt;%
+  ggplot(aes(map_id = state)) +
+  geom_map(aes(fill=Percent), map = SE_states)+
+  facet_wrap(vars(mode)) +
+  expand_limits(x= SE_states$long, y=SE_states$lat)+
+  coord_map(&amp;quot;polyconic&amp;quot;) +
+  scale_fill_viridis(option = &amp;quot;D&amp;quot;) +
+  theme_void()+
+  labs(fill = &amp;quot;Percent of commuters&amp;quot;, title= &amp;quot;The Southeast Hates Walking&amp;quot;)+
+  theme(legend.position=&amp;quot;bottom&amp;quot;, plot.title = element_text(hjust =0.5), 
+        strip.text.x = element_text(size = 12))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;to-simplifiy-the-color-scheme-i-gropued-the-percentage-of-walking.-it-is-surprising-to-see-that-west-virginia-seems-to-be-a-big-walking-to-work-state.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;To simplifiy the color scheme, I gropued the percentage of walking. It is surprising to see that West Virginia seems to be a big walking-to-work state.&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#group dataset by % groups
+commute_summary$Group[commute_summary$Percent &amp;lt;= 2] = &amp;quot;1&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Unknown or uninitialised column: `Group`.&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;commute_summary$Group[commute_summary$Percent &amp;gt;= 2 &amp;amp; commute_summary$Percent &amp;lt;= 3] = &amp;quot;2&amp;quot;
+commute_summary$Group[commute_summary$Percent &amp;gt;= 3 &amp;amp; commute_summary$Percent &amp;lt;= 4] = &amp;quot;3&amp;quot;
+commute_summary$Group[commute_summary$Percent &amp;gt;= 4 &amp;amp; commute_summary$Percent &amp;lt;= 5] = &amp;quot;4&amp;quot;
+commute_summary$Group[commute_summary$Percent &amp;gt;= 5 &amp;amp; commute_summary$Percent &amp;lt;= 6] = &amp;quot;5&amp;quot;
+commute_summary$Group[commute_summary$Percent &amp;gt;= 6] = &amp;quot;6&amp;quot;
+
+#change group category to Numeric so map can be colored with group #
+commute_summary$Group &amp;lt;- as.numeric(commute_summary$Group)
+
+#seperate &amp;#39;mode&amp;#39; into bike and walk
+commute_Walk &amp;lt;- dplyr::filter(commute_summary, mode == &amp;quot;Walk&amp;quot;)
+
+#Map of groups for % walking
+commute_Walk %&amp;gt;%
+  ggplot(aes(map_id = state)) +
+  geom_map(aes(fill=Group), color=&amp;quot;black&amp;quot;, map = states_map)+
+  expand_limits(x= states_map$long, y=states_map$lat)+
+  coord_map(&amp;quot;polyconic&amp;quot;) +
+  scale_fill_viridis(option = &amp;quot;D&amp;quot;) +
+  theme_void()+
+  labs(fill = &amp;quot;Percent of commuters&amp;quot;, title= &amp;quot;Walking to Work by State&amp;quot;)+
+  theme(legend.position=&amp;quot;bottom&amp;quot;, plot.title = element_text(hjust =0.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

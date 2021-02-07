@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>post | Steven DiFalco</title>
+    <link>https://stevendifalco.com/tag/post/</link>
+      <atom:link href="https://stevendifalco.com/tag/post/index.xml" rel="self" type="application/rss+xml" />
+    <description>post</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2020 Steven DiFalco</copyright><lastBuildDate>Tue, 09 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://stevendifalco.com/images/icon_hub4e451f8373da2880beada631b18c0fe_51688_512x512_fill_lanczos_center_2.png</url>
+      <title>post</title>
+      <link>https://stevendifalco.com/tag/post/</link>
+    </image>
+    
+    <item>
+      <title>Test Post</title>
+      <link>https://stevendifalco.com/post/test-post/</link>
+      <pubDate>Tue, 09 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>https://stevendifalco.com/post/test-post/</guid>
+      <description>
+
+
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://stevendifalco.com/post/2020-06-09-test-post/index_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
